@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:p="http://www.springframework.org/schema/p"  
+        xmlns:context="http://www.springframework.org/schema/context"  
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans   
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context   
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">  
+      
+	  <bean id="localprint" name="localprint" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" scope="singleton"> 
+			<property name="driverClass"><value>org.sqlite.JDBC</value></property> 
+			<property name="jdbcUrl"><value>jdbc:sqlite:db/print.db</value></property> 
+			<property name="minPoolSize"><value>20</value></property>
+			<property name="maxPoolSize"><value>50</value></property>
+			<property name="maxStatements"><value>100</value></property>
+			<property name="acquireIncrement"><value>10</value></property>
+			<property name="initialPoolSize"><value>20</value></property>
+			<property name="testConnectionOnCheckout"><value>true</value></property>
+	  </bean>
+	  
+	  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	      <property name="dataSource" ref="localprint" />
+	  </bean>
+
+	  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	      <property name="dataSource" ref="localprint" />  
+	  </bean>
+	   
+	  <tx:annotation-driven />
+      
+            
+  </beans>  
+  
